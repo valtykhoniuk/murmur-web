@@ -11,11 +11,18 @@ export interface User {
 
 export interface Character {
   id: number;
+  owner_id: number;
   name: string;
   persona: string;
-  greeting: string;
-  exampleDialogue: string;
-  avatarUrl: string | null;
+  start_message: string;
+  avatar_url: string;
+}
+
+export interface CharacterCreateInput {
+  name: string;
+  persona: string;
+  start_message: string;
+  avatar_url: string;
 }
 
 export interface ChatSettings {

@@ -1,6 +1,49 @@
-import { Link } from "react-router-dom";
+import { useEffect, useState, type FormEvent } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+import type { Character, CharacterCreateInput } from "../entities/types";
+import { apiFetch } from "../lib/api";
 
 const CharacterForm = () => {
+  const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [persona, setPersona] = useState("");
+  const [startMessage, setStartMessage] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      navigate("/auth");
+    }
+  }, [navigate]);
+
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    setError(null);
+    setSubmitting(true);
+
+    const body: CharacterCreateInput = {
+      name: name.trim(),
+      persona: persona.trim(),
+      start_message: startMessage.trim(),
+      avatar_url: avatarUrl.trim(),
+    };
+
+    try {
+      await apiFetch<Character>("/characters", {
+        method: "POST",
+        body,
+      });
+      navigate("/characters");
+    } catch {
+      setError("Could not create character. Check you are logged in.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   return (
     <main className="page">
       <h1 className="page__title">Create character</h1>
@@ -8,10 +51,23 @@ const CharacterForm = () => {
         Structured character card — maps to POST /characters on the backend.
       </p>
 
-      <form className="card" onSubmit={(e) => e.preventDefault()}>
+      {error && (
+        <p className="page__subtitle" style={{ color: "#b00020" }}>
+          {error}
+        </p>
+      )}
+
+      <form className="card" onSubmit={handleSubmit}>
         <div className="form-field">
           <label htmlFor="name">Name</label>
-          <input id="name" name="name" placeholder="Character name" required />
+          <input
+            id="name"
+            name="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Character name"
+            required
+          />
         </div>
 
         <div className="form-field">
@@ -20,44 +76,40 @@ const CharacterForm = () => {
             id="persona"
             name="persona"
             rows={4}
+            value={persona}
+            onChange={(e) => setPersona(e.target.value)}
             placeholder="Personality, tone, background..."
             required
           />
         </div>
 
         <div className="form-field">
-          <label htmlFor="greeting">Greeting</label>
+          <label htmlFor="startMessage">Start message</label>
           <textarea
-            id="greeting"
-            name="greeting"
+            id="startMessage"
+            name="startMessage"
             rows={3}
+            value={startMessage}
+            onChange={(e) => setStartMessage(e.target.value)}
             placeholder="First message when chat starts"
             required
           />
         </div>
 
         <div className="form-field">
-          <label htmlFor="exampleDialogue">Example dialogue</label>
-          <textarea
-            id="exampleDialogue"
-            name="exampleDialogue"
-            rows={4}
-            placeholder="A few lines showing how they speak"
-          />
-        </div>
-
-        <div className="form-field">
-          <label htmlFor="avatarUrl">Avatar URL (optional)</label>
+          <label htmlFor="avatarUrl">Avatar URL</label>
           <input
             id="avatarUrl"
             name="avatarUrl"
             type="url"
-            placeholder="https://..."
+            value={avatarUrl}
+            onChange={(e) => setAvatarUrl(e.target.value)}
+            placeholder="https://... (leave empty if none)"
           />
         </div>
 
-        <button type="submit" className="btn">
-          Save character
+        <button type="submit" className="btn" disabled={submitting}>
+          {submitting ? "Saving..." : "Save character"}
         </button>
       </form>
 

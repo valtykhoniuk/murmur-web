@@ -1,6 +1,37 @@
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+import CharacterCard from "../components/CharacterCard";
+import type { Character } from "../entities/types";
+import { apiFetch } from "../lib/api";
 
 const Characters = () => {
+  const navigate = useNavigate();
+  const [characters, setCharacters] = useState<Character[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/auth");
+      return;
+    }
+
+    async function loadCharacters() {
+      try {
+        const data = await apiFetch<Character[]>("/characters");
+        setCharacters(data);
+      } catch {
+        setError("Could not load characters. Try logging in again.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadCharacters();
+  }, [navigate]);
+
   return (
     <main className="page">
       <h1 className="page__title">Your characters</h1>
@@ -8,16 +39,21 @@ const Characters = () => {
         Pick a character to chat with, or create a new one.
       </p>
 
+      {loading && <p className="page__subtitle">Loading...</p>}
+      {error && (
+        <p className="page__subtitle" style={{ color: "#b00020" }}>
+          {error}
+        </p>
+      )}
+
+      {!loading && !error && characters.length === 0 && (
+        <p className="page__subtitle">No characters yet. Create your first one.</p>
+      )}
+
       <ul className="character-list">
-        <li>
-          <div>
-            <strong>Demo character</strong>
-            <p>Placeholder — load from GET /characters later.</p>
-          </div>
-          <Link to="/chat/demo" className="btn">
-            Chat
-          </Link>
-        </li>
+        {characters.map((character) => (
+          <CharacterCard key={character.id} character={character} />
+        ))}
       </ul>
 
       <div className="page__actions">
