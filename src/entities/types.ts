@@ -1,31 +1,37 @@
+export type UserRole = "owner" | "friend" | "public";
 export type MessageRole = "user" | "assistant" | "system";
 export type ReplyLength = "short" | "medium" | "long";
+export type TokenResponse = { access_token: string; token_type: string };
 
-interface User {
+export interface User {
   id: number;
   email: string;
+  role: UserRole;
 }
 
-interface Character {
+export interface Character {
   id: number;
   name: string;
-  //more parameters
+  persona: string;
+  greeting: string;
+  exampleDialogue: string;
+  avatarUrl: string | null;
 }
 
-interface ChatSettings {
-  temperature: Float32Array;
+export interface ChatSettings {
+  temperature: number;
   replyLength: ReplyLength;
-  //more parameters
 }
 
-interface Chat {
+export interface Chat {
   id: number;
   characterId: number;
   settings: ChatSettings;
 }
 
-interface Messsage {
+export interface Message {
   id: number;
   role: MessageRole;
   content: string;
+  createdAt: string;
 }
