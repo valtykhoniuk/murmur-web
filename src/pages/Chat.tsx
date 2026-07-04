@@ -30,18 +30,12 @@ const ChatPage = () => {
 
     async function loadChat() {
       try {
-        const [chatList, messageList] = await Promise.all([
-          apiFetch<Chat[]>("/chats"),
+        const [chat, messageList] = await Promise.all([
+          apiFetch<Chat>(`/chats/${chatId}`),
           apiFetch<Message[]>(`/chats/${chatId}/messages`),
         ]);
 
-        const currentChat = chatList.find((c) => c.id === Number(chatId));
-        if (!currentChat) {
-          setError("Chat not found.");
-          return;
-        }
-
-        setChatInfo(currentChat);
+        setChatInfo(chat);
         setMessages(messageList);
       } catch {
         setError("Could not load chat. Try logging in again.");
