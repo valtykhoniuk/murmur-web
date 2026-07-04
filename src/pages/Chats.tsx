@@ -1,28 +1,58 @@
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-const demoChats = [
-  { id: "demo", characterName: "Demo character", lastMessage: "Last message preview…" },
-];
+import ChatCard from "../components/ChatCard";
+import type { Chat } from "../entities/types";
+import { apiFetch } from "../lib/api";
 
 const Chats = () => {
+  const navigate = useNavigate();
+  const [chats, setChats] = useState<Chat[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/auth");
+      return;
+    }
+
+    async function loadChats() {
+      try {
+        const data = await apiFetch<Chat[]>("/chats");
+        setChats(data);
+      } catch {
+        setError("Could not load chats. Try logging in again.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadChats();
+  }, [navigate]);
+
   return (
     <main className="page">
       <h1 className="page__title">Your chats</h1>
-      <p className="page__subtitle">
-        All conversations — load from GET /chats later.
-      </p>
+      <p className="page__subtitle">All your conversations.</p>
+
+      {loading && <p className="page__subtitle">Loading...</p>}
+      {error && (
+        <p className="page__subtitle" style={{ color: "#b00020" }}>
+          {error}
+        </p>
+      )}
+
+      {!loading && !error && chats.length === 0 && (
+        <p className="page__subtitle">
+          No chats yet. Pick a character and start talking.
+        </p>
+      )}
 
       <ul className="character-list">
-        {demoChats.map((chat) => (
-          <li key={chat.id}>
-            <div>
-              <strong>{chat.characterName}</strong>
-              <p>{chat.lastMessage}</p>
-            </div>
-            <Link to={`/chat/${chat.id}`} className="btn">
-              Open
-            </Link>
-          </li>
+        {chats.map((chat) => (
+          <ChatCard key={chat.id} chat={chat} />
         ))}
       </ul>
 

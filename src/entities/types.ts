@@ -1,5 +1,5 @@
 export type UserRole = "owner" | "friend" | "public";
-export type MessageRole = "user" | "assistant" | "system";
+export type MessageRole = "user" | "assistant" | "system" | "character";
 export type ReplyLength = "short" | "medium" | "long";
 export type TokenResponse = { access_token: string; token_type: string };
 
@@ -25,20 +25,28 @@ export interface CharacterCreateInput {
   avatar_url: string;
 }
 
+export interface Chat {
+  id: number;
+  user_id: number;
+  character_id: number;
+  character_name: string;
+  created_at: string;
+}
+
 export interface ChatSettings {
   temperature: number;
   replyLength: ReplyLength;
 }
 
-export interface Chat {
-  id: number;
-  characterId: number;
-  settings: ChatSettings;
-}
-
 export interface Message {
   id: number;
+  chat_id: number;
   role: MessageRole;
   content: string;
-  createdAt: string;
+  created_at: string;
+}
+
+export interface SendMessageResponse {
+  user_message: Message;
+  assistant_message: Message;
 }
