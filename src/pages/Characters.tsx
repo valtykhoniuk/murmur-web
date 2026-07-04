@@ -41,7 +41,7 @@ const Characters = () => {
 
       {loading && <p className="page__subtitle">Loading...</p>}
       {error && (
-        <p className="page__subtitle" style={{ color: "#b00020" }}>
+        <p className="page__error">
           {error}
         </p>
       )}
