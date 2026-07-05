@@ -31,7 +31,16 @@ export async function apiFetch<T>(
   });
 
   if (!response.ok) {
-    throw new Error(`API error: ${response.status}`);
+    let message = `API error: ${response.status}`;
+    try {
+      const errorBody = (await response.json()) as { detail?: unknown };
+      if (typeof errorBody.detail === "string") {
+        message = errorBody.detail;
+      }
+    } catch {
+      // keep generic message
+    }
+    throw new Error(message);
   }
 
   return response.json() as Promise<T>;

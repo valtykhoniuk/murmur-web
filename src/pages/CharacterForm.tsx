@@ -37,8 +37,10 @@ const CharacterForm = () => {
         body,
       });
       navigate("/characters");
-    } catch {
-      setError("Could not create character. Check you are logged in.");
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Could not create character.",
+      );
     } finally {
       setSubmitting(false);
     }
@@ -101,7 +103,7 @@ const CharacterForm = () => {
           <input
             id="avatarUrl"
             name="avatarUrl"
-            type="url"
+            type="text"
             value={avatarUrl}
             onChange={(e) => setAvatarUrl(e.target.value)}
             placeholder="https://... (leave empty if none)"
@@ -116,6 +118,9 @@ const CharacterForm = () => {
       <div className="page__actions">
         <Link to="/characters" className="btn btn--secondary">
           Back to list
+        </Link>
+        <Link to="/chats" className="btn btn--secondary">
+          Your chats
         </Link>
       </div>
     </main>

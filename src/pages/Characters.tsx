@@ -1,24 +1,32 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 import CharacterCard from "../components/CharacterCard";
 import type { Character } from "../entities/types";
 import { apiFetch } from "../lib/api";
+import { ensureSession } from "../lib/session";
 
 const Characters = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const isDemo = searchParams.get("demo") === "1";
   const [characters, setCharacters] = useState<Character[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/auth");
-      return;
-    }
+    async function init() {
+      const hasSession = await ensureSession({ demo: isDemo });
+      if (!hasSession) {
+        if (isDemo) {
+          setError("Demo login failed. Start the backend: uvicorn on port 8000.");
+          setLoading(false);
+          return;
+        }
+        navigate("/auth");
+        return;
+      }
 
-    async function loadCharacters() {
       try {
         const data = await apiFetch<Character[]>("/characters");
         setCharacters(data);
@@ -29,8 +37,8 @@ const Characters = () => {
       }
     }
 
-    loadCharacters();
-  }, [navigate]);
+    init();
+  }, [navigate, isDemo]);
 
   return (
     <main className="page">
@@ -59,6 +67,9 @@ const Characters = () => {
       <div className="page__actions">
         <Link to="/characters/new" className="btn">
           Create character
+        </Link>
+        <Link to="/chats" className="btn btn--secondary">
+          Your chats
         </Link>
         <Link to="/" className="btn btn--secondary">
           Home

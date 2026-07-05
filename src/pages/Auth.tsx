@@ -19,8 +19,14 @@ const AuthPage = () => {
       });
       localStorage.setItem("token", data.access_token);
       navigate("/characters");
-    } catch {
-      setError("Invalid email or password");
+    } catch (err) {
+      const message =
+        err instanceof TypeError
+          ? "Cannot reach server. Is the backend running on port 8000?"
+          : err instanceof Error
+            ? err.message
+            : "Invalid email or password";
+      setError(message);
     }
   }
 
@@ -31,11 +37,7 @@ const AuthPage = () => {
         Email and password. Backend will return a JWT after login.
       </p>
 
-      {error && (
-        <p className="page__error">
-          {error}
-        </p>
-      )}
+      {error && <p className="page__error">{error}</p>}
 
       <form className="card" onSubmit={handleSubmit}>
         <div className="form-field">
@@ -74,9 +76,6 @@ const AuthPage = () => {
       <div className="page__actions">
         <Link to="/" className="btn btn--secondary">
           Back
-        </Link>
-        <Link to="/characters" className="btn btn--secondary">
-          Skip to characters (dev)
         </Link>
       </div>
     </main>
