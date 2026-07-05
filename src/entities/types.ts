@@ -1,6 +1,8 @@
 export type UserRole = "owner" | "friend" | "public";
 export type MessageRole = "user" | "assistant" | "system" | "character";
 export type ReplyLength = "short" | "medium" | "long";
+export type SpeechStyle = "talkative" | "equal" | "initiative";
+export type Initiativity = "rock" | "medium" | "long";
 export type TokenResponse = { access_token: string; token_type: string };
 
 export interface User {
@@ -31,11 +33,14 @@ export interface Chat {
   character_id: number;
   character_name: string;
   created_at: string;
+  chat_settings: ChatSettings;
 }
 
 export interface ChatSettings {
   temperature: number;
-  replyLength: ReplyLength;
+  reply_length: ReplyLength;
+  speech_style: SpeechStyle;
+  initiativity: Initiativity;
 }
 
 export interface Message {

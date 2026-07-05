@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
 import MessageBubble from "../components/MessageBubble";
 import type { Chat, Message, SendMessageResponse } from "../entities/types";
@@ -7,6 +7,7 @@ import { apiFetch } from "../lib/api";
 
 const ChatPage = () => {
   const { chatId } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -45,7 +46,7 @@ const ChatPage = () => {
     }
 
     loadChat();
-  }, [chatId, navigate]);
+  }, [chatId, navigate, location.key]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -105,6 +106,17 @@ const ChatPage = () => {
           {chatInfo?.character_name ?? `Chat #${chatId}`}
         </h1>
         <p className="page__subtitle">Powered by GPT</p>
+        {chatInfo?.chat_settings && (
+          <p className="page__subtitle">
+            Active settings: temp {chatInfo.chat_settings.temperature.toFixed(1)}
+            {" · "}
+            {chatInfo.chat_settings.reply_length} replies
+            {" · "}
+            {chatInfo.chat_settings.speech_style} speech
+            {" · "}
+            {chatInfo.chat_settings.initiativity} plot
+          </p>
+        )}
       </header>
 
       {loading && <p className="page__subtitle">Loading...</p>}

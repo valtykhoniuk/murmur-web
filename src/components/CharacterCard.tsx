@@ -20,8 +20,10 @@ const CharacterCard = ({ character }: CharacterCardProps) => {
         body: { character_id: character.id },
       });
       navigate(`/chat/${chat.id}`);
-    } catch {
-      alert("Could not start chat. Are you logged in?");
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Could not start chat.";
+      alert(message);
     } finally {
       setLoading(false);
     }
