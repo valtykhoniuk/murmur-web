@@ -73,8 +73,8 @@ const ChatPage = () => {
         data.assistant_message,
       ]);
       setInput("");
-    } catch {
-      setError("Failed to send message.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to send message.");
     } finally {
       setSending(false);
     }
@@ -86,15 +86,11 @@ const ChatPage = () => {
         <h1 className="page__title">
           {chatInfo?.character_name ?? `Chat #${chatId}`}
         </h1>
-        <p className="page__subtitle">Echo replies for now · AI coming next</p>
+        <p className="page__subtitle">Powered by GPT</p>
       </header>
 
       {loading && <p className="page__subtitle">Loading...</p>}
-      {error && (
-        <p className="page__error">
-          {error}
-        </p>
-      )}
+      {error && <p className="page__error">{error}</p>}
 
       <section className="chat-layout">
         <div className="card chat-messages" aria-label="Message history">

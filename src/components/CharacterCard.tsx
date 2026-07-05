@@ -31,7 +31,7 @@ const CharacterCard = ({ character }: CharacterCardProps) => {
     <li>
       <div>
         <strong>{character.name}</strong>
-        <p>{character.start_message}</p>
+        <p title={character.start_message}>{character.start_message}</p>
       </div>
       <button
         type="button"

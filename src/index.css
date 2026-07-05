@@ -232,6 +232,7 @@ select {
   padding: 0.8rem 1rem;
   border-radius: 16px;
   line-height: 1.45;
+  white-space: pre-wrap;
 }
 
 .message--user {
@@ -264,7 +265,7 @@ select {
 .character-list li {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   gap: 1rem;
   padding: 1rem 1.1rem;
   background: var(--glass-bg);
@@ -287,6 +288,10 @@ select {
   margin: 0.25rem 0 0;
   color: var(--text-muted);
   font-size: 0.9rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .page__actions {
