@@ -58,22 +58,40 @@ const ChatPage = () => {
 
     setSending(true);
     setError(null);
+    setInput("");
+
+    const tempUserId = -Date.now();
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: tempUserId,
+        chat_id: Number(chatId),
+        role: "user",
+        content,
+        created_at: new Date().toISOString(),
+      },
+    ]);
 
     try {
-      const data = await apiFetch<SendMessageResponse>(
+      const result = await apiFetch<SendMessageResponse>(
         `/chats/${chatId}/message`,
         {
           method: "POST",
           body: { content },
         },
       );
+
       setMessages((prev) => [
-        ...prev,
-        data.user_message,
-        data.assistant_message,
+        ...prev.filter((message) => message.id !== tempUserId),
+        result.user_message,
+        result.assistant_message,
       ]);
-      setInput("");
     } catch (err) {
+      setMessages((prev) =>
+        prev.filter((message) => message.id !== tempUserId),
+      );
+      setInput(content);
       setError(err instanceof Error ? err.message : "Failed to send message.");
     } finally {
       setSending(false);
@@ -93,10 +111,19 @@ const ChatPage = () => {
       {error && <p className="page__error">{error}</p>}
 
       <section className="chat-layout">
-        <div className="card chat-messages" aria-label="Message history">
+        <div
+          className="card chat-messages"
+          aria-label="Message history"
+          aria-busy={sending}
+        >
           {messages.map((message) => (
             <MessageBubble key={message.id} message={message} />
           ))}
+          {sending && (
+            <p className="page__subtitle chat-messages__pending">
+              Waiting for reply…
+            </p>
+          )}
           <div ref={messagesEndRef} />
         </div>
 
