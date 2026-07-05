@@ -115,6 +115,8 @@ const ChatPage = () => {
             {chatInfo.chat_settings.speech_style} speech
             {" · "}
             {chatInfo.chat_settings.initiativity} plot
+            {" · "}
+            {chatInfo.chat_settings.max_messages} msgs memory
           </p>
         )}
       </header>

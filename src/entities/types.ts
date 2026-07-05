@@ -41,6 +41,7 @@ export interface ChatSettings {
   reply_length: ReplyLength;
   speech_style: SpeechStyle;
   initiativity: Initiativity;
+  max_messages: number;
 }
 
 export interface Message {

@@ -10,6 +10,7 @@ const ChatCustomization = () => {
   const [replyLength, setReplyLength] = useState<ReplyLength>("medium");
   const [speechStyle, setSpeechStyle] = useState<SpeechStyle>("equal");
   const [initiativity, setInitiativity] = useState<Initiativity>("medium");
+  const [maxMessages, setMaxMessages] = useState(20);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -34,6 +35,7 @@ const ChatCustomization = () => {
         setReplyLength(chat.chat_settings.reply_length);
         setSpeechStyle(chat.chat_settings.speech_style);
         setInitiativity(chat.chat_settings.initiativity);
+        setMaxMessages(chat.chat_settings.max_messages);
       } catch {
         setError("Could not load chat settings. Try logging in again.");
       } finally {
@@ -56,6 +58,7 @@ const ChatCustomization = () => {
       reply_length: replyLength,
       speech_style: speechStyle,
       initiativity,
+      max_messages: maxMessages,
     };
 
     try {
@@ -149,6 +152,23 @@ const ChatCustomization = () => {
                 Initiative (can move plot as they wish)
               </option>
             </select>
+          </div>
+
+          <div className="form-field">
+            <label htmlFor="maxMessages">
+              Memory depth <span>(recent messages in context) — {maxMessages}</span>
+            </label>
+            <input
+              id="maxMessages"
+              name="maxMessages"
+              value={maxMessages}
+              onChange={(e) => setMaxMessages(Number(e.target.value))}
+              type="range"
+              min={5}
+              max={30}
+              step={5}
+              disabled={saving}
+            />
           </div>
 
           <button type="submit" className="btn" disabled={saving}>
