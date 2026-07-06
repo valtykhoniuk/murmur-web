@@ -2,15 +2,16 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 import CharacterCard from "../components/CharacterCard";
-import type { Character } from "../entities/types";
+import type { Character, User } from "../entities/types";
 import { apiFetch } from "../lib/api";
-import { ensureSession } from "../lib/session";
+import { clearSession, ensureSession } from "../lib/session";
 
 const Characters = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const isDemo = searchParams.get("demo") === "1";
   const [characters, setCharacters] = useState<Character[]>([]);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -19,7 +20,9 @@ const Characters = () => {
       const hasSession = await ensureSession({ demo: isDemo });
       if (!hasSession) {
         if (isDemo) {
-          setError("Demo login failed. Start the backend: uvicorn on port 8000.");
+          setError(
+            "Demo login failed. The server may be waking up — go Home and try demo again in 30 seconds.",
+          );
           setLoading(false);
           return;
         }
@@ -28,10 +31,18 @@ const Characters = () => {
       }
 
       try {
-        const data = await apiFetch<Character[]>("/characters");
+        const [data, currentUser] = await Promise.all([
+          apiFetch<Character[]>("/characters"),
+          apiFetch<User>("/auth/me"),
+        ]);
         setCharacters(data);
-      } catch {
-        setError("Could not load characters. Try logging in again.");
+        setUser(currentUser);
+      } catch (err) {
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Could not load characters. Try logging in again.",
+        );
       } finally {
         setLoading(false);
       }
@@ -40,6 +51,11 @@ const Characters = () => {
     init();
   }, [navigate, isDemo]);
 
+  function handleLogout() {
+    clearSession();
+    navigate("/");
+  }
+
   return (
     <main className="page">
       <h1 className="page__title">Your characters</h1>
@@ -47,12 +63,20 @@ const Characters = () => {
         Pick a character to chat with, or create a new one.
       </p>
 
-      {loading && <p className="page__subtitle">Loading...</p>}
-      {error && (
-        <p className="page__error">
-          {error}
+      {user && (
+        <p className="page__subtitle account-banner">
+          Signed in as <strong>{user.email}</strong>
+          {user.role === "public" && (
+            <>
+              {" "}
+              · Shared demo account (same characters for all demo visitors)
+            </>
+          )}
         </p>
       )}
+
+      {loading && <p className="page__subtitle">Loading...</p>}
+      {error && <p className="page__error">{error}</p>}
 
       {!loading && !error && characters.length === 0 && (
         <p className="page__subtitle">No characters yet. Create your first one.</p>
@@ -77,6 +101,9 @@ const Characters = () => {
         <Link to="/chats" className="btn btn--secondary">
           Your chats
         </Link>
+        <button type="button" className="btn btn--secondary" onClick={handleLogout}>
+          Log out
+        </button>
         <Link to="/" className="btn btn--secondary">
           Home
         </Link>

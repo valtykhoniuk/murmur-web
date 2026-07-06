@@ -352,6 +352,10 @@ select {
   color: var(--accent-cyan) !important;
 }
 
+.account-banner strong {
+  color: var(--accent-periwinkle);
+}
+
 .form-preview {
   display: flex;
   flex-direction: column;

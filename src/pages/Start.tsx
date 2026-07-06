@@ -23,7 +23,8 @@ const Start = () => {
         <Link to="/characters?demo=1" className="choice-card">
           <strong>Try demo</strong>
           <span>
-            Public demo account — 20 messages total, no signup required.
+            Shared public account — 20 messages total, same pool for all demo
+            visitors.
           </span>
         </Link>
       </div>

@@ -12,6 +12,7 @@ const AuthPage = () => {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError(null);
+    localStorage.removeItem("token");
     try {
       const data = await apiFetch<TokenResponse>("/auth/login", {
         method: "POST",
@@ -21,11 +22,9 @@ const AuthPage = () => {
       navigate("/characters");
     } catch (err) {
       const message =
-        err instanceof TypeError
-          ? "Cannot reach server. Is the backend running on port 8000?"
-          : err instanceof Error
-            ? err.message
-            : "Invalid email or password";
+        err instanceof Error
+          ? err.message
+          : "Invalid email or password";
       setError(message);
     }
   }
