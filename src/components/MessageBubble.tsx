@@ -1,4 +1,5 @@
 import type { Message } from "../entities/types";
+import { MessageContent } from "../lib/messageContent";
 
 interface MessageBubbleProps {
   message: Message;
@@ -11,7 +12,7 @@ const MessageBubble = ({ message }: MessageBubbleProps) => {
     <div
       className={`message ${isUser ? "message--user" : "message--assistant"}`}
     >
-      {message.content}
+      <MessageContent content={message.content} />
     </div>
   );
 };

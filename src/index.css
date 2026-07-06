@@ -264,15 +264,113 @@ select {
 
 .character-list li {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 0.85rem;
   padding: 1rem 1.1rem;
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius);
   backdrop-filter: blur(10px);
   transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.list-item__content {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.list-item__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.list-item__actions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.list-item__meta {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+
+.avatar {
+  flex-shrink: 0;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(143, 167, 255, 0.45);
+  box-shadow: 0 0 16px rgba(94, 85, 240, 0.25);
+}
+
+.avatar--fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    var(--accent-indigo),
+    var(--accent-pink)
+  );
+  color: #fff;
+  font-weight: 700;
+}
+
+.btn--danger {
+  background: rgba(8, 14, 72, 0.45);
+  color: var(--text-muted);
+  border: 1px solid var(--glass-border);
+  box-shadow: none;
+}
+
+.btn--danger:hover:not(:disabled) {
+  color: var(--text-primary);
+  border-color: var(--accent-periwinkle);
+  box-shadow: 0 0 18px rgba(143, 167, 255, 0.15);
+}
+
+.chat-header {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.chat-header .page__title {
+  margin-bottom: 0.25rem;
+}
+
+.chat-header__meta {
+  margin-bottom: 0.5rem !important;
+}
+
+.demo-banner {
+  margin-top: 0.25rem !important;
+  color: var(--accent-cyan) !important;
+}
+
+.form-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.form-preview__label {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.message__image {
+  display: block;
+  max-width: min(100%, 320px);
+  margin-top: 0.5rem;
+  border-radius: 10px;
+  border: 1px solid rgba(143, 167, 255, 0.35);
 }
 
 .character-list li:hover {

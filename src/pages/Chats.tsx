@@ -52,7 +52,13 @@ const Chats = () => {
 
       <ul className="character-list">
         {chats.map((chat) => (
-          <ChatCard key={chat.id} chat={chat} />
+          <ChatCard
+            key={chat.id}
+            chat={chat}
+            onDeleted={(id) =>
+              setChats((prev) => prev.filter((item) => item.id !== id))
+            }
+          />
         ))}
       </ul>
 

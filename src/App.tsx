@@ -15,6 +15,7 @@ function App() {
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/characters" element={<Characters />} />
         <Route path="/characters/new" element={<CharacterForm />} />
+        <Route path="/characters/:characterId/edit" element={<CharacterForm />} />
         <Route path="/chats" element={<Chats />} />
         <Route path="/chat/:chatId" element={<Chat />} />
         <Route path="/chat/:chatId/settings" element={<ChatCustomization />} />

@@ -21,9 +21,9 @@ const Start = () => {
         </Link>
 
         <Link to="/characters?demo=1" className="choice-card">
-          <strong>Try demo (as pet-project) </strong>
+          <strong>Try demo</strong>
           <span>
-            Public demo account with daily message limit. No signup required.
+            Public demo account — 20 messages total, no signup required.
           </span>
         </Link>
       </div>

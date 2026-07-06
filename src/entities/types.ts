@@ -32,8 +32,11 @@ export interface Chat {
   user_id: number;
   character_id: number;
   character_name: string;
+  character_avatar_url: string;
   created_at: string;
   chat_settings: ChatSettings;
+  preview: string | null;
+  message_count: number;
 }
 
 export interface ChatSettings {

@@ -60,7 +60,13 @@ const Characters = () => {
 
       <ul className="character-list">
         {characters.map((character) => (
-          <CharacterCard key={character.id} character={character} />
+          <CharacterCard
+            key={character.id}
+            character={character}
+            onDeleted={(id) =>
+              setCharacters((prev) => prev.filter((item) => item.id !== id))
+            }
+          />
         ))}
       </ul>
 
