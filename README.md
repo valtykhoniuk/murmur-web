@@ -2,7 +2,9 @@
 
 React + TypeScript + Vite UI for **Murmur**, a Character.AI-style chat app.
 
-Companion backend: [murmur](../murmur) (separate repo).
+Companion backend: [murmur](https://github.com/valtykhoniuk/murmur) (separate repo).
+
+**Live app:** https://murmur-web-tawny.vercel.app
 
 ## Features
 
@@ -17,7 +19,7 @@ Companion backend: [murmur](../murmur) (separate repo).
 
 - React 19, TypeScript, Vite 8
 - React Router 7
-- CSS (glassmorphism theme, no UI framework)
+- CSS (ATLITUDE-inspired palette, Google Sans Flex)
 
 ## Quick start (local)
 
@@ -49,41 +51,29 @@ From the home page, click **Try demo** — auto-logs in as the public demo user 
 | `npm run preview` | Preview production build locally |
 | `npm run lint` | ESLint |
 
-## Environment (production)
+## Deploy (Vercel)
 
-Create `.env.production` (or set in your host):
+1. Connect this repo on [Vercel](https://vercel.com).
+2. Framework preset: **Vite** (auto-detected).
+3. Build command: `npm run build`
+4. Output directory: `dist`
+5. Add environment variable:
+
+| Key | Value |
+|-----|--------|
+| `VITE_API_URL` | `https://murmur-oa8r.onrender.com` |
+
+No trailing slash. Redeploy after changing env vars.
+
+6. On the **backend** (Render), add your Vercel URL to `CORS_ORIGINS`:
 
 ```bash
-VITE_API_URL=https://your-api.example.com
+http://localhost:5173,https://murmur-web-tawny.vercel.app
 ```
 
-If unset, the app falls back to `/api` (same-origin). Use a reverse proxy or CDN rule to forward `/api` to the backend, **or** set `VITE_API_URL` to the full backend URL.
+### First load on free Render
 
-## Deploy notes
-
-### Static hosting (Vercel, Netlify, Cloudflare Pages)
-
-1. Connect this repo.
-2. Build command: `npm run build`
-3. Output directory: `dist`
-4. Set `VITE_API_URL` to your deployed FastAPI URL.
-5. Ensure backend CORS allows your frontend origin.
-
-### Same-origin (nginx)
-
-Serve `dist/` and proxy `/api` to uvicorn — then `VITE_API_URL` can stay unset.
-
-Example nginx snippet:
-
-```nginx
-location /api/ {
-    proxy_pass http://127.0.0.1:8000/;
-}
-location / {
-    root /var/www/murmur-web/dist;
-    try_files $uri /index.html;
-}
-```
+The backend may sleep when idle. If demo/login is slow the first time, wait ~30–60 seconds and retry.
 
 ## Routes
 
