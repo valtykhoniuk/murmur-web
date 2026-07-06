@@ -21,7 +21,7 @@ const Characters = () => {
       if (!hasSession) {
         if (isDemo) {
           setError(
-            "Demo login failed. The server may be waking up — go Home and try demo again in 30 seconds.",
+            "Demo login failed. The API may be starting — try again shortly.",
           );
           setLoading(false);
           return;
@@ -67,10 +67,7 @@ const Characters = () => {
         <p className="page__subtitle account-banner">
           Signed in as <strong>{user.email}</strong>
           {user.role === "public" && (
-            <>
-              {" "}
-              · Shared demo account (same characters for all demo visitors)
-            </>
+            <> · Shared demo account (same characters for all demo visitors)</>
           )}
         </p>
       )}
@@ -79,7 +76,9 @@ const Characters = () => {
       {error && <p className="page__error">{error}</p>}
 
       {!loading && !error && characters.length === 0 && (
-        <p className="page__subtitle">No characters yet. Create your first one.</p>
+        <p className="page__subtitle">
+          No characters yet. Create your first one.
+        </p>
       )}
 
       <ul className="character-list">
@@ -101,7 +100,11 @@ const Characters = () => {
         <Link to="/chats" className="btn btn--secondary">
           Your chats
         </Link>
-        <button type="button" className="btn btn--secondary" onClick={handleLogout}>
+        <button
+          type="button"
+          className="btn btn--secondary"
+          onClick={handleLogout}
+        >
           Log out
         </button>
         <Link to="/" className="btn btn--secondary">

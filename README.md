@@ -57,23 +57,21 @@ From the home page, click **Try demo** — auto-logs in as the public demo user 
 2. Framework preset: **Vite** (auto-detected).
 3. Build command: `npm run build`
 4. Output directory: `dist`
-5. Add environment variable:
+5. **Production API (Vercel proxy — required because EB is HTTP-only):**
 
 | Key | Value |
 |-----|--------|
-| `VITE_API_URL` | `https://murmur-oa8r.onrender.com` |
+| `VITE_API_URL` | `/api` |
 
-No trailing slash. Redeploy after changing env vars.
+Do **not** set `VITE_API_URL` to the raw `http://...elasticbeanstalk.com` URL — browsers block HTTPS → HTTP requests.
 
-6. On the **backend** (Render), add your Vercel URL to `CORS_ORIGINS`:
+`vercel.json` proxies `/api/*` → Elastic Beanstalk server-side.
+
+6. On the **backend** (AWS EB), set `CORS_ORIGINS` (optional when using proxy; still useful for `/docs`):
 
 ```bash
 http://localhost:5173,https://murmur-web-tawny.vercel.app
 ```
-
-### First load on free Render
-
-The backend may sleep when idle. If demo/login is slow the first time, wait ~30–60 seconds and retry.
 
 ## Routes
 
