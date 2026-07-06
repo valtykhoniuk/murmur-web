@@ -2,16 +2,11 @@ type ApiFetchOptions = Omit<RequestInit, "body"> & {
   body?: unknown;
 };
 
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
 export function apiUrl(path: string): string {
-  const base = import.meta.env.VITE_API_URL?.replace(/\/$/, "") ?? "/api";
+  const raw = import.meta.env.VITE_API_URL?.replace(/\/$/, "");
+  const base = raw ? raw : "/api";
   const suffix = path.startsWith("/") ? path : `/${path}`;
   return `${base}${suffix}`;
-}
-
-function isNetworkError(err: unknown): boolean {
-  return err instanceof TypeError;
 }
 
 async function apiFetchOnce<T>(
@@ -65,27 +60,12 @@ export async function apiFetch<T>(
   path: string,
   options: ApiFetchOptions = {},
 ): Promise<T> {
-  const maxAttempts = 3;
-
-  for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
-    try {
-      return await apiFetchOnce<T>(path, options);
-    } catch (err) {
-      const canRetry = isNetworkError(err) && attempt < maxAttempts - 1;
-      if (canRetry) {
-        await sleep(3000);
-        continue;
-      }
-
-      if (isNetworkError(err)) {
-        throw new Error(
-          "Cannot reach server. If this is the live demo, wait ~30s and try again (free tier cold start).",
-        );
-      }
-
-      throw err;
+  try {
+    return await apiFetchOnce<T>(path, options);
+  } catch (err) {
+    if (err instanceof TypeError) {
+      throw new Error("Cannot reach server. Try again in a few seconds.");
     }
+    throw err;
   }
-
-  throw new Error("Cannot reach server.");
 }
