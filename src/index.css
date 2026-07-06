@@ -1,19 +1,19 @@
 :root {
-  --bg-deep: #020634;
-  --bg-dark: #050a4a;
-  --text-primary: #f4f6ff;
-  --text-muted: #a8b4e8;
-  --accent-periwinkle: #8fa7ff;
-  --accent-indigo: #5e55f0;
-  --accent-deep: #0402c3;
-  --accent-pink: #eb9eff;
-  --accent-cyan: #82e0eb;
-  --accent-blue: #56bde8;
-  --glass-bg: rgba(8, 14, 72, 0.55);
-  --glass-border: rgba(143, 167, 255, 0.22);
+  --bg-deep: #000228;
+  --bg-dark: #0c08a0;
+  --text-primary: #f0e8f2;
+  --text-muted: #9a90e8;
+  --accent-periwinkle: #f0e8f2;
+  --accent-indigo: #2248e0;
+  --accent-deep: #0c08a0;
+  --accent-pink: #f0b8e8;
+  --accent-cyan: #8f82e8;
+  --accent-blue: #2248e0;
+  --glass-bg: rgba(10, 8, 90, 0.48);
+  --glass-border: rgba(140, 130, 220, 0.18);
   --error: #ff8fa7;
   --radius: 14px;
-  --shadow-glow: 0 0 40px rgba(94, 85, 240, 0.25);
+  --shadow-glow: 0 0 40px rgba(34, 72, 224, 0.16);
 }
 
 *,
@@ -30,16 +30,16 @@ body,
 
 body {
   margin: 0;
-  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-family: "Google Sans Flex", system-ui, -apple-system, sans-serif;
   line-height: 1.5;
   color: var(--text-primary);
   background-color: var(--bg-deep);
   background-image:
-    radial-gradient(circle at 15% 20%, rgba(94, 85, 240, 0.35), transparent 40%),
-    radial-gradient(circle at 85% 10%, rgba(235, 158, 255, 0.2), transparent 35%),
-    radial-gradient(circle at 70% 80%, rgba(86, 189, 232, 0.18), transparent 40%),
-    linear-gradient(rgba(143, 167, 255, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(143, 167, 255, 0.06) 1px, transparent 1px);
+    radial-gradient(circle at 15% 20%, rgba(34, 72, 224, 0.22), transparent 40%),
+    radial-gradient(circle at 85% 10%, rgba(240, 184, 232, 0.1), transparent 35%),
+    radial-gradient(circle at 70% 80%, rgba(140, 130, 220, 0.18), transparent 40%),
+    linear-gradient(rgba(240, 232, 242, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(240, 232, 242, 0.05) 1px, transparent 1px);
   background-size: auto, auto, auto, 48px 48px, 48px 48px;
   background-attachment: fixed;
 }
@@ -119,14 +119,14 @@ select {
   padding: 0.65rem 0.85rem;
   border: 1px solid var(--glass-border);
   border-radius: 10px;
-  background: rgba(2, 6, 52, 0.7);
+  background: rgba(0, 2, 50, 0.78);
   color: var(--text-primary);
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .form-field input::placeholder,
 .form-field textarea::placeholder {
-  color: rgba(168, 180, 232, 0.55);
+  color: rgba(240, 232, 242, 0.42);
 }
 
 .form-field input:focus,
@@ -134,7 +134,7 @@ select {
 .form-field select:focus {
   outline: none;
   border-color: var(--accent-indigo);
-  box-shadow: 0 0 0 3px rgba(94, 85, 240, 0.25);
+  box-shadow: 0 0 0 3px rgba(34, 72, 224, 0.24);
 }
 
 .btn {
@@ -145,18 +145,18 @@ select {
   background: linear-gradient(
     135deg,
     var(--accent-indigo),
-    var(--accent-deep)
+    var(--accent-cyan)
   );
   color: #fff;
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.15s, box-shadow 0.2s, opacity 0.2s;
-  box-shadow: 0 8px 24px rgba(94, 85, 240, 0.35);
+  box-shadow: 0 8px 24px rgba(34, 72, 224, 0.32);
 }
 
 .btn:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 10px 28px rgba(94, 85, 240, 0.45);
+  box-shadow: 0 10px 28px rgba(140, 130, 220, 0.28);
 }
 
 .btn:disabled {
@@ -165,7 +165,7 @@ select {
 }
 
 .btn--secondary {
-  background: rgba(8, 14, 72, 0.45);
+  background: rgba(10, 8, 90, 0.45);
   color: var(--text-primary);
   border: 1px solid var(--glass-border);
   box-shadow: none;
@@ -173,7 +173,7 @@ select {
 
 .btn--secondary:hover:not(:disabled) {
   border-color: var(--accent-periwinkle);
-  box-shadow: 0 0 20px rgba(143, 167, 255, 0.15);
+  box-shadow: 0 0 20px rgba(140, 130, 220, 0.14);
 }
 
 .choice-grid {
@@ -196,7 +196,7 @@ select {
 
 .choice-card:hover {
   border-color: var(--accent-pink);
-  box-shadow: 0 0 30px rgba(235, 158, 255, 0.2);
+  box-shadow: 0 0 30px rgba(240, 184, 232, 0.14);
   transform: translateY(-2px);
 }
 
@@ -240,18 +240,18 @@ select {
   background: linear-gradient(
     135deg,
     var(--accent-indigo),
-    var(--accent-periwinkle)
+    var(--accent-cyan)
   );
   color: #fff;
-  box-shadow: 0 6px 20px rgba(94, 85, 240, 0.35);
+  box-shadow: 0 6px 20px rgba(34, 72, 224, 0.3);
 }
 
 .message--assistant {
   align-self: flex-start;
-  background: rgba(5, 10, 74, 0.75);
-  border: 1px solid rgba(130, 224, 235, 0.35);
+  background: rgba(10, 8, 90, 0.58);
+  border: 1px solid rgba(140, 130, 220, 0.24);
   color: var(--text-primary);
-  box-shadow: 0 0 18px rgba(86, 189, 232, 0.12);
+  box-shadow: 0 0 18px rgba(34, 72, 224, 0.1);
 }
 
 .character-list {
@@ -302,8 +302,8 @@ select {
   flex-shrink: 0;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid rgba(143, 167, 255, 0.45);
-  box-shadow: 0 0 16px rgba(94, 85, 240, 0.25);
+  border: 2px solid rgba(140, 130, 220, 0.36);
+  box-shadow: 0 0 16px rgba(34, 72, 224, 0.18);
 }
 
 .avatar--fallback {
@@ -313,14 +313,14 @@ select {
   background: linear-gradient(
     135deg,
     var(--accent-indigo),
-    var(--accent-pink)
+    var(--accent-cyan)
   );
   color: #fff;
   font-weight: 700;
 }
 
 .btn--danger {
-  background: rgba(8, 14, 72, 0.45);
+  background: rgba(10, 8, 90, 0.45);
   color: var(--text-muted);
   border: 1px solid var(--glass-border);
   box-shadow: none;
@@ -329,7 +329,7 @@ select {
 .btn--danger:hover:not(:disabled) {
   color: var(--text-primary);
   border-color: var(--accent-periwinkle);
-  box-shadow: 0 0 18px rgba(143, 167, 255, 0.15);
+  box-shadow: 0 0 18px rgba(140, 130, 220, 0.14);
 }
 
 .chat-header {
@@ -370,12 +370,12 @@ select {
   max-width: min(100%, 320px);
   margin-top: 0.5rem;
   border-radius: 10px;
-  border: 1px solid rgba(143, 167, 255, 0.35);
+  border: 1px solid rgba(140, 130, 220, 0.26);
 }
 
 .character-list li:hover {
-  border-color: rgba(143, 167, 255, 0.45);
-  box-shadow: 0 0 24px rgba(94, 85, 240, 0.15);
+  border-color: rgba(140, 130, 220, 0.34);
+  box-shadow: 0 0 24px rgba(34, 72, 224, 0.14);
 }
 
 .character-list strong {
