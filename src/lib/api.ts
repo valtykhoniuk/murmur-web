@@ -56,16 +56,38 @@ async function apiFetchOnce<T>(
   return JSON.parse(text) as T;
 }
 
+function isRetryableApiError(err: unknown): boolean {
+  if (!(err instanceof Error)) {
+    return false;
+  }
+
+  return /API error: (500|502|503|504)/.test(err.message);
+}
+
+function retryDelayMs(attempt: number): number {
+  return 800 * (attempt + 1);
+}
+
 export async function apiFetch<T>(
   path: string,
   options: ApiFetchOptions = {},
+  retries = 2,
 ): Promise<T> {
-  try {
-    return await apiFetchOnce<T>(path, options);
-  } catch (err) {
-    if (err instanceof TypeError) {
-      throw new Error("Cannot reach server. Try again in a few seconds.");
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      return await apiFetchOnce<T>(path, options);
+    } catch (err) {
+      if (attempt < retries && isRetryableApiError(err)) {
+        await new Promise((resolve) => setTimeout(resolve, retryDelayMs(attempt)));
+        continue;
+      }
+
+      if (err instanceof TypeError) {
+        throw new Error("Cannot reach server. Try again in a few seconds.");
+      }
+      throw err;
     }
-    throw err;
   }
+
+  throw new Error("API request failed");
 }
